@@ -29,7 +29,9 @@ func NewDatabase(config *config.Config) *Database {
 // Implementations
 
 func (d *Database) Migrate() {
-	d.DB.AutoMigrate(
+	if err := d.DB.AutoMigrate(
 		&models.User{},
-	)
+	); err != nil {
+		panic(err)
+	}
 }

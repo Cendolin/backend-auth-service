@@ -9,7 +9,6 @@ import (
 	"github.com/gofiber/fiber/v3"
 
 	"github.com/gofiber/fiber/v3/middleware/cors"
-	"github.com/gofiber/fiber/v3/middleware/earlydata"
 	"github.com/gofiber/fiber/v3/middleware/helmet"
 	"github.com/gofiber/fiber/v3/middleware/idempotency"
 )
@@ -33,7 +32,6 @@ func NewServer(config *config.Config, db *database.Database) *Server {
 func (s *Server) init() {
 	s.App.Use(cors.New())
 	s.App.Use(helmet.New())
-	s.App.Use(earlydata.New())
 	s.App.Use(idempotency.New())
 
 	controllers := controllers.NewControllers(s.DB, s.Config)
@@ -43,6 +41,7 @@ func (s *Server) init() {
 	})
 
 	s.App.Post("/login", controllers.LoginController)
+	s.App.Post("/register", controllers.RegisterController)
 }
 
 func (s *Server) Start() error {

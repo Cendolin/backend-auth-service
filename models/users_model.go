@@ -1,7 +1,6 @@
 package models
 
 import (
-	"database/sql"
 	"time"
 
 	"github.com/google/uuid"
@@ -9,12 +8,14 @@ import (
 )
 
 type User struct {
-	ID              string         `gorm:"primaryKey"`
-	Email           string         `json:"email" gorm:"column:email"`
-	PasswordHash    string         `json:"password_hash" gorm:"column:password_hash"`
-	Username        string         `json:"username" gorm:"column:username"`
-	Biography       string         `json:"biography" gorm:"column:biography"`
-	SuspendedReason sql.NullString `json:"suspended_reason" gorm:"column:suspended_reason"`
+	ID              string     `gorm:"primaryKey"`
+	Email           string     `json:"email" gorm:"uniqueIndex:email_idx,column:email"`
+	PasswordHash    string     `json:"password_hash" gorm:"column:password_hash"`
+	Username        string     `json:"username" gorm:"uniqueIndex:username_idx,column:username"`
+	Biography       string     `json:"biography" gorm:"column:biography"`
+	SuspendedReason NullString `json:"suspended_reason" gorm:"column:suspended_reason"`
+	Verified        bool       `json:"verified" gorm:"column:verified"`
+	Country         string     `json:"country" gorm:"column:country"`
 
 	CreatedAt time.Time `gorm:"column:created_at" json:"created_at"`
 	UpdatedAt time.Time `gorm:"column:updated_at" json:"updated_at"`
