@@ -1,7 +1,19 @@
 package main
 
-import "fmt"
+import (
+	"github.com/cendolin/backend-auth-service/config"
+	"github.com/cendolin/backend-auth-service/database"
+	"github.com/cendolin/backend-auth-service/server"
+)
 
 func main() {
-	fmt.Println("Hello World")
+	config := config.NewConfig()
+
+	db := database.NewDatabase(config)
+	db.Migrate()
+
+	server := server.NewServer(config, db)
+	if err := server.Start(); err != nil {
+		panic(err)
+	}
 }
