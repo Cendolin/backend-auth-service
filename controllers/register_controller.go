@@ -49,7 +49,6 @@ func (t *Controllers) RegisterController(ctx fiber.Ctx) error {
 		Email:        payload.Email,
 		Username:     payload.Username,
 		PasswordHash: string(pw),
-		Biography:    payload.Biography,
 		Country:      payload.Country,
 	}
 
