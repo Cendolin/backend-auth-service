@@ -7,4 +7,6 @@ type UserClaim struct {
 
 	Username string `json:"username"`
 	Id       string `json:"user_id"`
+	Country  string `json:"country"`
+	Email    string `json:"email"`
 }

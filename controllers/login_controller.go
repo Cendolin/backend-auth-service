@@ -29,7 +29,7 @@ func (t *Controllers) LoginController(ctx fiber.Ctx) error {
 	}
 
 	user := &models.User{}
-	if err := t.DB.DB.Model(&models.User{}).Select("password_hash", "username", "email", "id", "verified").Where("username = ?", payload.Username).Or("email = ?", payload.Email).Where("suspended_reason IS NULL").Where("verified = true").First(user).Error; err != nil {
+	if err := t.DB.DB.Model(&models.User{}).Select("password_hash", "username", "email", "id", "verified", "country").Where("username = ?", payload.Username).Or("email = ?", payload.Email).Where("suspended_reason IS NULL").Where("verified = true").First(user).Error; err != nil {
 		return ctx.Status(401).JSON(fiber.Map{
 			"message": err.Error(),
 		})
@@ -52,6 +52,8 @@ func (t *Controllers) LoginController(ctx fiber.Ctx) error {
 		},
 		Username: user.Username,
 		Id:       user.ID,
+		Country:  user.Country,
+		Email:    user.Email,
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS512, claims)
