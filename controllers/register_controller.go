@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/cendolin/backend-auth-service/dtos"
 	"github.com/cendolin/backend-auth-service/models"
+	"github.com/cendolin/backend-auth-service/rabbit"
 	checker "github.com/cinar/checker/v2"
 	"github.com/gofiber/fiber/v3"
 	"github.com/matthewhartstonge/argon2"
@@ -57,6 +58,8 @@ func (t *Controllers) RegisterController(ctx fiber.Ctx) error {
 			"message": err.Error(),
 		})
 	}
+
+	go t.Rabbit.SendToExchange(rabbit.ROUTING_KEY_USER_CREATED, *user_payload)
 
 	return ctx.Status(200).JSON(fiber.Map{
 		"user": user_payload,

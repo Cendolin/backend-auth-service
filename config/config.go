@@ -41,5 +41,6 @@ func NewConfig() *Config {
 		Jwt: &ConfigJwt{
 			Key: os.Getenv("JWT_KEY"),
 		},
+		RabbitMQUrl: os.Getenv("RABBITMQ_URI"),
 	}
 }

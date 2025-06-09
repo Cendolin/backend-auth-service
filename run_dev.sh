@@ -10,4 +10,6 @@ export DATABASE_USER=hanif
 export DATABASE_PASSWORD=haniF123//
 export DATABASE_DBNAME=cendolin
 
+export RABBITMQ_URI=amqp://guest:guest@localhost:5672
+
 go run .

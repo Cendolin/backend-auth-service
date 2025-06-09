@@ -3,9 +3,11 @@ package server
 import (
 	"fmt"
 
+	"github.com/bytedance/sonic"
 	"github.com/cendolin/backend-auth-service/config"
 	"github.com/cendolin/backend-auth-service/controllers"
 	"github.com/cendolin/backend-auth-service/database"
+	"github.com/cendolin/backend-auth-service/rabbit"
 	"github.com/gofiber/fiber/v3"
 
 	"github.com/gofiber/fiber/v3/middleware/cors"
@@ -13,17 +15,20 @@ import (
 	"github.com/gofiber/fiber/v3/middleware/idempotency"
 )
 
-func NewServer(config *config.Config, db *database.Database) *Server {
+func NewServer(config *config.Config, db *database.Database, rabbit *rabbit.Rabbit) *Server {
 	app := fiber.New(fiber.Config{
 		ServerHeader: "Cendolin",
 		AppName:      "Cendolin Auth Service",
 		TrustProxy:   true,
+		JSONEncoder:  sonic.Marshal,
+		JSONDecoder:  sonic.Unmarshal,
 	})
 
 	return &Server{
 		App:    app,
 		Config: config,
 		DB:     db,
+		Rabbit: rabbit,
 	}
 }
 
@@ -34,7 +39,7 @@ func (s *Server) init() {
 	s.App.Use(helmet.New())
 	s.App.Use(idempotency.New())
 
-	controllers := controllers.NewControllers(s.DB, s.Config)
+	controllers := controllers.NewControllers(s.DB, s.Config, s.Rabbit)
 
 	s.App.Get("/", func(c fiber.Ctx) error {
 		return c.SendStatus(200)

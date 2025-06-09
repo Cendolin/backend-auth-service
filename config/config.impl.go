@@ -18,7 +18,8 @@ type ConfigJwt struct {
 }
 
 type Config struct {
-	Database *ConfigDatabase
-	Api      *ConfigApi
-	Jwt      *ConfigJwt
+	Database    *ConfigDatabase
+	Api         *ConfigApi
+	Jwt         *ConfigJwt
+	RabbitMQUrl string
 }
